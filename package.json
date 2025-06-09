@@ -1,0 +1,21 @@
+{
+  "name": "loal-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "RedStone576",
+  "license": "Artistic-2.0",
+  "description": "",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250605.0",
+    "dotenv": "^16.5.0",
+    "slash-up": "^1.4.2"
+  },
+  "dependencies": {
+    "@discord-additions/embed-builder": "^1.0.2",
+    "@haelp/teto": "^3.0.14",
+    "slash-create": "^6.4.1"
+  }
+}
