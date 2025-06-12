@@ -1,4 +1,4 @@
-import { SlashCommand, CommandOptionType, SlashCreator, CommandContext } from "slash-create/web"
+import { SlashCommand, SlashCreator } from "slash-create/web"
 
 export default class Command extends SlashCommand 
 {

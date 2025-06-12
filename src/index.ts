@@ -5,11 +5,11 @@ const server = new CloudflareWorkerServer()
 let creator: SlashCreator
 
 // wrangler secret put <name>
-declare const DISCORD_APP_ID: string
-declare const DISCORD_PUBLIC_KEY: string
-declare const DISCORD_BOT_TOKEN: string
-declare const DISCORD_GUILD_ID: string
-declare const TETRIO_BOT_TOKEN: string
+// declare const DISCORD_APP_ID: string
+// declare const DISCORD_PUBLIC_KEY: string
+// declare const DISCORD_BOT_TOKEN: string
+// declare const DISCORD_GUILD_ID: string
+// declare const TETRIO_BOT_TOKEN: string
 
 function makeCreator(env: Record<string, any>) 
 {

@@ -2,6 +2,8 @@ import { SlashCommand, CommandOptionType, SlashCreator, CommandContext } from "s
 import { ch } from "@haelp/teto/ch"
 import EmbedBuilder from "@discord-additions/embed-builder"
 
+import formatProfile from "./profile"
+
 export default class Command extends SlashCommand 
 {
     constructor(creator: SlashCreator) 
@@ -71,8 +73,8 @@ export default class Command extends SlashCommand
     async run(ctx: CommandContext) 
     {
         // options.username is inside options[ctx.subcommands[0]].username
-        const profileMode = ctx.subcommands[0]
-        const queryRaw    = ctx.options[ctx.subcommands[0]].username
+        const profileMode = ctx.subcommands[0] as "profile" | "sprint" | "blitz" | "league" | "quickplay"
+        const queryRaw    = ctx.options[ctx.subcommands[0]].username as string
 
         //ctx.options[ctx.subcommands[0]].username.trim()
         //let usernameError = []
@@ -91,7 +93,7 @@ export default class Command extends SlashCommand
         {
             const id = await ch.users.search(`discord:id:${ctx.user.id}`)
 
-            if (!id[0]) return "Please provide a username, a user id, or a mention as the query argument!\nOr link your Discord account on TETR.IO to fetch your own profile using the command with no argument"
+            if (!id?.[0]) return "Please provide a username, a user id, or a mention as the query argument!\nOr link your Discord account on TETR.IO to fetch your own profile using the command with no argument"
         
             queryType = "self"
             query     = id[0]._id
@@ -105,7 +107,7 @@ export default class Command extends SlashCommand
 
             const id = await ch.users.search(`discord:id:${mention}`)
 
-            if (!id[0]) return "That user does not have a linked TETR.IO account!"
+            if (!id?.[0]) return "That user does not have a linked TETR.IO account!"
 
             queryType = "discord_id", //"discord_mention"
             query     = id[0]._id
@@ -121,13 +123,13 @@ export default class Command extends SlashCommand
         {
             const id = await ch.users.search(`discord:id:${queryRaw}`)
 
-            if (!id[0]) return "That user does not have a linked TETR.IO account!"
+            if (!id?.[0]) return "That user does not have a linked TETR.IO account!"
         
             queryType = "discord_id"
             query     = id[0]._id
         }
 
-        else if (str.length === 24)
+        else if (queryRaw.length === 24)
         {
             queryType = "tetrio_id"
             query     = queryRaw
@@ -140,15 +142,43 @@ export default class Command extends SlashCommand
             query     = "unknown"
         }
 
+        /*
         const modes = {
-            "profile": (query: string) => ,
-            "sprint": (query: string) =>,
-            "blitz": (query: string) =>,
-            "league": (query: string) =>,
-            "quickplay": (query: string) => ,
+            "profile": (query: string) => 
+            {
+                const res = await formatProfile(query)
+
+                if (!!res.err) return res.err
+            
+                return {
+                    embeds: [res]
+                }
+            },
+            "sprint": (query: string) => "balls",
+            "blitz": (query: string) => "balls",
+            "league": (query: string) => "balls",
+            "quickplay": (query: string) => "balls",
+        }*/
+
+        parentCommand: switch (profileMode)
+        {
+            case "profile":
+            {
+                const res = await formatProfile(query)
+
+                if (!!res.err) return res.err
+            
+                return {
+                    embeds: [res]
+                }
+            }
+
+            
         }
 
-        return `> subcommand: ${profileMode}\n> queryRaw: ${queryRaw}\n> query: ${query}\n> queryType: ${queryType}`
+        return
+
+        //return `> subcommand: ${profileMode}\n> queryRaw: ${queryRaw}\n> query: ${query}\n> queryType: ${queryType}`
     
         /*parentCommand: switch (ctx.subcommands[0]) // subcommand
         {
